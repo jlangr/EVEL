@@ -3,7 +3,7 @@ package com.ev.obd.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-import com.ev.obd.client.ObdSpeed;
+import com.ev.obd.client.ObdSpeedAPI;
 import com.ev.obd.client.Speed;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -17,7 +17,7 @@ public class AverageAccelerationTest {
 
     @Test
     public void testCalculateAverageAcceleration() {
-        ObdSpeed obdSpeed = Mockito.mock(ObdSpeed.class);
+        ObdSpeedAPI obdSpeed = Mockito.mock(ObdSpeedAPI.class);
         LocalDate testDate = LocalDate.of(2024, 7, 28);
 
         List<Speed> mockSpeeds = Arrays.asList(
@@ -33,15 +33,15 @@ public class AverageAccelerationTest {
 
         when(obdSpeed.speeds(testDate)).thenReturn(mockSpeeds);
 
-        AverageAcceleration averageAcceleration = new AverageAcceleration(obdSpeed);
-        double result = averageAcceleration.calculateAverageAcceleration(testDate);
+        var averageAcceleration = new AverageAccelerationImpl(obdSpeed);
+        double result = averageAcceleration.calculate(testDate);
 
         assertEquals(0.0, result, 0.001);
     }
 
     @Test
     public void testCalculateAverageAccelerationNonZero() {
-        ObdSpeed obdSpeed = Mockito.mock(ObdSpeed.class);
+        ObdSpeedAPI obdSpeed = Mockito.mock(ObdSpeedAPI.class);
         LocalDate testDate = LocalDate.of(2024, 7, 28);
 
         List<Speed> mockSpeeds = Arrays.asList(
@@ -55,8 +55,8 @@ public class AverageAccelerationTest {
 
         when(obdSpeed.speeds(testDate)).thenReturn(mockSpeeds);
 
-        AverageAcceleration averageAcceleration = new AverageAcceleration(obdSpeed);
-        double result = averageAcceleration.calculateAverageAcceleration(testDate);
+        var averageAcceleration = new AverageAccelerationImpl(obdSpeed);
+        double result = averageAcceleration.calculate(testDate);
 
         // Manually calculate expected average acceleration
         double[] accelerations = {
